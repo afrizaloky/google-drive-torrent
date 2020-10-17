@@ -1,5 +1,5 @@
+require('dotenv').config()
 "use strict";
-
 
 const driveCredentials = require('./data/driveCredentials.json');
 const DRIVE_CLIENT_ID = process.env.clientId;
