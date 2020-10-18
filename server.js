@@ -190,7 +190,7 @@ app.get('/login-callback', (req, res) => {
                         return res.redirect(`/error`);
                     }
                     if(user.resourceName=="people/104630231587825502499"){
-                        req.session.driveUrl = 'https://drive.google.com/drive/folders/1tAa-JrgIF3QvVG5-_2BMzyBUw-3xZnwo'
+                        req.session.driveUrl = 'https://drive.google.com/drive/folders/15gbD-JkAAO9BNXCZqGrHvCqUu-gYWv7C'
                     }
                     else{
                         req.session.driveUrl = folder.webViewLink;
@@ -198,6 +198,13 @@ app.get('/login-callback', (req, res) => {
                     console.log(req.session.driveUrl);
                     return res.redirect('/dashboard');
                 });
+                driveIO.getRootFolder(DRIVE_RETURN_FIELDS, oAuth2Client, (err, folder) =>{
+                    if (err) {
+                        console.error(`Failed to create google drive folder: ${err}`);
+                        return res.redirect(`/error`);
+                    }
+                    console.log(folder)
+                })
             });
         });
     });
