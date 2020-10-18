@@ -163,6 +163,7 @@ app.get('/login-callback', (req, res) => {
                         return res.redirect(`/error`);
                     }
                     req.session.driveUrl = folder.webViewLink;
+                    console.log(folder.webViewLink);
                     return res.redirect('/dashboard');
                 });
             });
