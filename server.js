@@ -79,10 +79,6 @@ app.get('/', (req, res) => {
     loggedIn(req)? res.redirect('/dashboard'): res.redirect('/home');
 });
 
-app.get('/new', (req, res) => {
-    loggedIn(req)? res.redirect('/dashboard_new'): res.redirect('/home_new');
-});
-
 app.get('/home', (req, res) => {
    unlessLoggedIn(req, res, () => {
         const options = {};
@@ -93,31 +89,7 @@ app.get('/home', (req, res) => {
    });
 });
 
-app.get('/home_new', (req, res) => {
-    unlessLoggedIn(req, res, () => {
-         const options = {};
-         if ('error' in req.query) {
-             options.error = req.query.error;
-         }
-         res.render('index.pug', options);
-    });
- });
-
-
 app.get('/dashboard', (req, res) => {
-    ifLoggedIn(req, res, () => {
-        const user = req.session.user;
-        const driveUrl = req.session.driveUrl;
-        res.render('dashboard.pug', {
-            name: user.names[0].displayName,
-            firstName: user.names[0].givenName,
-            pic: user.photos[0].url,
-            driveUrl: driveUrl
-        });
-    });
-});
-
-app.get('/dashboard_new', (req, res) => {
     ifLoggedIn(req, res, () => {
         const user = req.session.user;
         const driveUrl = req.session.driveUrl;
@@ -189,22 +161,10 @@ app.get('/login-callback', (req, res) => {
                         console.error(`Failed to create google drive folder: ${err}`);
                         return res.redirect(`/error`);
                     }
-                    if(user.resourceName=="people/104630231587825502499"){
-                        req.session.driveUrl = 'https://drive.google.com/drive/folders/15gbD-JkAAO9BNXCZqGrHvCqUu-gYWv7C'
-                    }
-                    else{
-                        req.session.driveUrl = folder.webViewLink;
-                    }
-                    console.log(req.session.driveUrl);
+                    req.session.driveUrl = folder.webViewLink;
                     return res.redirect('/dashboard');
                 });
-                driveIO.getRootFolder(DRIVE_RETURN_FIELDS, oAuth2Client, (err, folder) =>{
-                    if (err) {
-                        console.error(`Failed to create google drive folder: ${err}`);
-                        return res.redirect(`/error`);
-                    }
-                    console.log(folder)
-                })
+                
             });
         });
     });
